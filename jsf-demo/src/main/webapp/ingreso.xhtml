@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>#{ingresoController.message}</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:menubar>
+            <p:submenu label="Empleado" icon="pi pi-file">
+                <p:menuitem value="Ingreso Empleados" url="ingreso.jsf" />
+            </p:submenu>
+            <p:submenu label="Incidencias">
+                <p:menuitem value="Ingreso de incidencias" url="incidencia.jsf" />
+                <p:menuitem value="Búsqueda de incidencias" url="busqueda.jsf" />
+            </p:submenu>
+        </p:menubar>
+
+        <p:growl id="growl" life="2000" showSummary="true" showDetail="true"/>
+        <p:panel id="panelEmpleado" header="Empleado" toggleable="true" toggleOrientation="horizontal">
+            <p:panelGrid columns="2">
+                <p:outputLabel for="textUsername" value="Usuario" />
+                <p:inputText id="textUsername" value="#{ingresoController.username}" required="true" >
+                    <f:validateLength minimum="5" ></f:validateLength>
+                </p:inputText>
+
+                <p:outputLabel for="textNombre" value="Nombre" />
+                <p:inputText id="textNombre" value="#{ingresoController.nombre}" required="true"/>
+
+                <p:outputLabel for="textApellido" value="Apellido" />
+                <p:inputText id="textApellido" value="#{ingresoController.apellido}" required="true"/>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Guardar" id="ajax" update="growl tablaEmpleados panelEmpleado" action="#{ingresoController.guardar}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+        </p:panel>
+        <p:panel id="panelEmpleados" header="Empleados" toggleable="true" toggleOrientation="horizontal">
+            <p:dataTable var="emp" value="#{ingresoController.empleados}" id="tablaEmpleados">
+                <p:column headerText="Id">
+                    <h:outputText value="#{emp.id}" />
+                </p:column>
+
+                <p:column headerText="Usuario">
+                    <h:outputText value="#{emp.username}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{emp.nombre}" />
+                </p:column>
+
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{emp.apellido}" />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+   </h:form>
+</h:body>
+</html>

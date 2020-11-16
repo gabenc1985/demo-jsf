@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>#{ingresoController.message}</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:menubar>
+            <p:submenu label="Empleado" icon="pi pi-file">
+                <p:menuitem value="Ingreso Empleados" url="ingreso.jsf" />
+            </p:submenu>
+            <p:submenu label="Incidencias">
+                <p:menuitem value="Ingreso de incidencias" url="incidencia.jsf" />
+                <p:menuitem value="Búsqueda de incidencias" url="busqueda.jsf" />
+            </p:submenu>
+        </p:menubar>
+        <p:growl id="growl" life="2000" showSummary="true" showDetail="true"/>
+        <p:panel id="panelIncidencia" header="Nueva Incidencia" toggleable="true" toggleOrientation="horizontal">
+        <p:panelGrid columns="2">
+
+            <p:outputLabel for="fecIngreso" value="Fecha Ingreso:" />
+            <p:datePicker id="fecIngreso" value="#{incidenciaController.fechaIngreso}" showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+
+            <p:outputLabel for="fecVencimiento" value="Fecha Vencimiento:" />
+            <p:datePicker id="fecVencimiento" value="#{incidenciaController.fechaVencimiento}" showIcon="true"  pattern="dd/MM/yyyy"/>
+
+            <p:outputLabel for="selectOne" value="Nivel de Severidad"  />
+            <p:selectOneMenu id="selectOne" value="#{incidenciaController.severidad}">
+                <f:selectItem itemLabel="Bajo" itemValue="1" />
+                <f:selectItem itemLabel="Medio" itemValue="2" />
+                <f:selectItem itemLabel="Alto" itemValue="3" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="textTitulo" value="Título" />
+            <p:inputText id="textTitulo" value="#{incidenciaController.titulo}" required="true"/>
+
+            <p:outputLabel for="textDescripcion" value="Descripción" />
+            <p:inputTextarea rows="10" cols="50" id="textDescripcion" value="#{incidenciaController.descripcion}" required="true" requiredMessage="Se requiere un comentario para actualizar la incidencia"/>
+
+            <p:outputLabel value="Asignar Usuario:" for="acForce" />
+            <p:autoComplete id="acForce" forceSelection="true" value="#{incidenciaController.idEmpleado}" minQueryLength="3" required="true"
+                            completeMethod="#{incidenciaController.buscarEmpleados}" emptyMessage="No existen coincidencias"
+                            var="emp" itemLabel="#{emp.nombreCompleto}" itemValue="#{emp.id}">
+                <p:ajax event="itemSelect" listener="#{incidenciaController.cargarInformacion}" update="growl" />
+            </p:autoComplete>
+        </p:panelGrid>
+            <br/>
+            <p:commandButton value="Guardar" id="ajax" update="growl panelIncidencia" action="#{incidenciaController.guardar}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+        </p:panel>
+
+    </h:form>
+</h:body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Incidencias</title>
+</h:head>
+
+<h:body>
+    <h:form id="formularioBusqueda">
+        <p:menubar>
+            <p:submenu label="Empleado" icon="pi pi-file">
+                <p:menuitem value="Ingreso Empleados" url="ingreso.jsf" />
+            </p:submenu>
+            <p:submenu label="Incidencias">
+                <p:menuitem value="Ingreso de incidencias" url="incidencia.jsf" />
+                <p:menuitem value="Búsqueda de incidencias" url="busqueda.jsf" />
+            </p:submenu>
+        </p:menubar>
+
+        <p:growl id="growl" life="2000" showSummary="true" showDetail="true"/>
+        <p:panel id="panelIncidencias" header="Incidencias" toggleable="true" toggleOrientation="horizontal">
+            <p:selectOneMenu id="selectOne" value="#{busquedaController.estado}" >
+                <f:selectItem itemLabel="Todas" itemValue="0" />
+            <f:selectItem itemLabel="Abierta" itemValue="1" />
+            <f:selectItem itemLabel="Cerrado" itemValue="3" />
+
+                <p:ajax event="itemSelect" update="growl tablaIncidencias"
+                        listener="#{busquedaController.buscarIncidencias}" />
+        </p:selectOneMenu>
+
+            <p:dataTable var="inc" value="#{busquedaController.incidencias}" id="tablaIncidencias" editable="true">
+                <p:ajax event="rowEdit" listener="#{busquedaController.actualizarRegistro}" update=":formularioBusqueda:growl"/>
+                <p:column headerText="Id">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{inc.id}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.id}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Título">
+                    <p:cellEditor>
+                    <f:facet name="output">
+                    <h:outputText value="#{inc.nombre}" />
+                    </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.nombre}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Severidad">
+                    <p:cellEditor>
+                    <f:facet name="output">
+                    <h:outputText value="#{inc.nombreSeveridad}" />
+                    </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.nombreSeveridad}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Asignado a">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{inc.nombreUsuario}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.nombreUsuario}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Fecha Creación">
+                    <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{inc.fechaIngreso}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.fechaIngreso}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Fecha Vencimiento">
+                    <p:cellEditor>
+                    <f:facet name="output">
+                    <h:outputText value="#{inc.fechaVencimiento}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.fechaVencimiento}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Comentario">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{inc.comentario}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputTextarea rows="10" cols="50" id="textDescripcion" value="#{inc.comentario}" required="true"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Fecha Cierre">
+                    <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{inc.fechaCierre}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </f:facet>
+                        <f:facet name="input">
+                            <p:calendar id="fecCierre" value="#{inc.fechaCierre}" showIcon="true"  pattern="dd/MM/yyyy"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column style="width:35px">
+                    <p:rowEditor  />
+                </p:column>
+                <p:column headerText="Estado">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{inc.estado}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{inc.estado}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+   </h:form>
+</h:body>
+</html>
